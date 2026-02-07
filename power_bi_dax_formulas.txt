@@ -1,0 +1,211 @@
+
+POWER BI DAX FORMULAS FOR SALES DASHBOARD
+==========================================
+
+📊 KEY MEASURES
+---------------
+
+1. Total Sales
+Total Sales = SUM(sales_data[Sales])
+
+2. Total Profit  
+Total Profit = SUM(sales_data[Profit])
+
+3. Total Orders
+Total Orders = COUNTROWS(sales_data)
+
+4. Average Order Value
+Avg Order Value = DIVIDE([Total Sales], [Total Orders], 0)
+
+5. Profit Margin %
+Profit Margin % = DIVIDE([Total Profit], [Total Sales], 0) * 100
+
+6. Total Customers
+Total Customers = DISTINCTCOUNT(sales_data[Customer_ID])
+
+7. Average Profit Per Order
+Avg Profit Per Order = DIVIDE([Total Profit], [Total Orders], 0)
+
+
+📅 TIME INTELLIGENCE MEASURES
+-----------------------------
+
+8. Sales Last Year
+Sales LY = CALCULATE([Total Sales], SAMEPERIODLASTYEAR(sales_data[Order_Date]))
+
+9. Sales Year to Date
+Sales YTD = TOTALYTD([Total Sales], sales_data[Order_Date])
+
+10. Sales Month to Date
+Sales MTD = TOTALMTD([Total Sales], sales_data[Order_Date])
+
+11. Sales vs Last Year
+Sales vs LY = [Total Sales] - [Sales LY]
+
+12. Sales Growth %
+Sales Growth % = DIVIDE([Sales vs LY], [Sales LY], 0) * 100
+
+13. Profit Last Year
+Profit LY = CALCULATE([Total Profit], SAMEPERIODLASTYEAR(sales_data[Order_Date]))
+
+14. Profit Growth %
+Profit Growth % = DIVIDE([Total Profit] - [Profit LY], [Profit LY], 0) * 100
+
+
+🎯 DYNAMIC MEASURES
+-------------------
+
+15. Top N Products (Parameter-based)
+Top N Products = 
+VAR TopProducts = 
+    TOPN(
+        [Top N Parameter],
+        ALLSELECTED(sales_data[Sub_Category]),
+        [Total Profit],
+        DESC
+    )
+RETURN
+    CALCULATE([Total Profit], TopProducts)
+
+16. Running Total Sales
+Running Total = 
+CALCULATE(
+    [Total Sales],
+    FILTER(
+        ALLSELECTED(sales_data[Order_Date]),
+        sales_data[Order_Date] <= MAX(sales_data[Order_Date])
+    )
+)
+
+17. Sales Rank by Region
+Region Rank = 
+RANKX(
+    ALLSELECTED(sales_data[Region]),
+    [Total Sales],
+    ,
+    DESC,
+    Dense
+)
+
+
+📈 CUSTOMER ANALYTICS
+--------------------
+
+18. New Customers
+New Customers = 
+CALCULATE(
+    DISTINCTCOUNT(sales_data[Customer_ID]),
+    FILTER(
+        sales_data,
+        sales_data[Order_Date] = 
+        CALCULATE(
+            MIN(sales_data[Order_Date]),
+            ALLEXCEPT(sales_data, sales_data[Customer_ID])
+        )
+    )
+)
+
+19. Repeat Customers
+Repeat Customers = 
+VAR AllCustomers = DISTINCTCOUNT(sales_data[Customer_ID])
+VAR NewCust = [New Customers]
+RETURN AllCustomers - NewCust
+
+20. Customer Lifetime Value
+Customer LTV = 
+DIVIDE(
+    [Total Sales],
+    [Total Customers],
+    0
+)
+
+
+💰 DISCOUNT ANALYSIS
+-------------------
+
+21. Average Discount %
+Avg Discount % = AVERAGE(sales_data[Discount]) * 100
+
+22. Sales with Discount
+Sales with Discount = 
+CALCULATE(
+    [Total Sales],
+    sales_data[Discount] > 0
+)
+
+23. Sales without Discount
+Sales without Discount = 
+CALCULATE(
+    [Total Sales],
+    sales_data[Discount] = 0
+)
+
+24. Discount Impact
+Discount Impact = [Sales without Discount] - [Sales with Discount]
+
+
+🎨 CONDITIONAL FORMATTING
+------------------------
+
+25. Profit Color
+Profit Color = 
+SWITCH(
+    TRUE(),
+    [Total Profit] > 100000, "Green",
+    [Total Profit] > 50000, "Yellow",
+    "Red"
+)
+
+26. Sales Target Achievement
+Target Achievement % = 
+VAR Target = 150000  // Set your monthly target
+RETURN
+DIVIDE([Total Sales], Target, 0) * 100
+
+27. Performance Indicator
+Performance = 
+IF(
+    [Sales Growth %] > 0,
+    "▲ Positive",
+    "▼ Negative"
+)
+
+
+📊 ADVANCED CALCULATIONS
+-----------------------
+
+28. Moving Average (3-Month)
+Sales MA3 = 
+AVERAGEX(
+    DATESINPERIOD(
+        sales_data[Order_Date],
+        LASTDATE(sales_data[Order_Date]),
+        -3,
+        MONTH
+    ),
+    [Total Sales]
+)
+
+29. Pareto Analysis (80/20 Rule)
+Pareto % = 
+VAR CurrentProduct = MAX(sales_data[Sub_Category])
+VAR ProductSales = CALCULATE([Total Sales], sales_data[Sub_Category] = CurrentProduct)
+VAR TotalSales = [Total Sales]
+VAR RunningTotal = 
+    CALCULATE(
+        [Total Sales],
+        FILTER(
+            ALLSELECTED(sales_data[Sub_Category]),
+            [Total Sales] >= ProductSales
+        )
+    )
+RETURN
+DIVIDE(RunningTotal, TotalSales, 0) * 100
+
+30. Days Since Last Order
+Days Since Last Order = 
+DATEDIFF(
+    MAX(sales_data[Order_Date]),
+    TODAY(),
+    DAY
+)

@@ -1,0 +1,16 @@
+SALES PERFORMANCE DASHBOARD - ANALYSIS SUMMARY
+================================================================================
+
+Report Generated: 2026-02-06 09:44:32
+
+Total Sales: $4,401,544.55
+Total Profit: $966,886.85
+Profit Margin: 21.97%
+Total Orders: 5,000
+
+TOP 5 INSIGHTS:
+1. Best performing region: North
+2. Most profitable category: Technology
+3. Largest customer segment: Corporate
+4. Best product: Mouse
+5. Average profit margin: 21.97%

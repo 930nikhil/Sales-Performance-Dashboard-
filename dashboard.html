@@ -1,0 +1,464 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Performance Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .kpi-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .kpi-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 25px;
+            border-radius: 15px;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .kpi-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .kpi-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+        
+        .kpi-value {
+            font-size: 2em;
+            font-weight: bold;
+        }
+        
+        .insights-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .insights-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        .insight-item {
+            background: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .insight-item h3 {
+            color: #764ba2;
+            margin-bottom: 10px;
+        }
+        
+        .insight-item p {
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .data-table th {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .data-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .data-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .recommendations {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .recommendation-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid #667eea;
+            transition: all 0.3s ease;
+        }
+        
+        .recommendation-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .recommendation-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .recommendation-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .recommendation-card li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            color: #555;
+        }
+        
+        .recommendation-card li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #2ecc71;
+            font-weight: bold;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+            color: #666;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin: 5px;
+        }
+        
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .badge-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Sales Performance Dashboard</h1>
+            <p class="subtitle">Comprehensive Analysis of 5,000 Orders | Jan 2022 - Dec 2024</p>
+        </header>
+        
+        <div class="kpi-container">
+            <div class="kpi-card">
+                <div class="kpi-label">Total Sales</div>
+                <div class="kpi-value">$4.40M</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Total Profit</div>
+                <div class="kpi-value">$966K</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Profit Margin</div>
+                <div class="kpi-value">21.97%</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Total Orders</div>
+                <div class="kpi-value">5,000</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Avg Order Value</div>
+                <div class="kpi-value">$880</div>
+            </div>
+        </div>
+        
+        <div class="insights-section">
+            <h2>🎯 Top 5 Strategic Insights</h2>
+            
+            <div class="insight-item">
+                <h3>1. Technology Products Drive Maximum Profitability</h3>
+                <p>Technology category generates 23.37% profit margin, significantly outperforming Furniture (16.51%) and contributing $507K in total profit despite representing only one-third of product categories.</p>
+                <span class="badge badge-success">High Impact</span>
+                <span class="badge badge-info">Priority Action</span>
+            </div>
+            
+            <div class="insight-item">
+                <h3>2. Regional Performance Imbalance</h3>
+                <p>North region leads with $931K in sales and 999 orders, while all regions maintain consistent 21-22% profit margins. The volume difference presents expansion opportunity.</p>
+                <span class="badge badge-warning">Growth Opportunity</span>
+            </div>
+            
+            <div class="insight-item">
+                <h3>3. Discount Optimization Critical</h3>
+                <p>Orders with 15%+ discounts show 24% lower profit per order ($153 vs $200). Current 20% discount policy on 5% of orders is eroding margins unnecessarily.</p>
+                <span class="badge badge-warning">Margin Risk</span>
+                <span class="badge badge-info">Quick Win</span>
+            </div>
+            
+            <div class="insight-item">
+                <h3>4. Untapped Office Supplies Potential</h3>
+                <p>Office Supplies category delivers 37.8% profit margin but represents only 10% of total revenue. Highest margin category with smallest market share indicates expansion opportunity.</p>
+                <span class="badge badge-success">High Margin</span>
+                <span class="badge badge-info">Growth Area</span>
+            </div>
+            
+            <div class="insight-item">
+                <h3>5. Corporate Segment Premium Value</h3>
+                <p>Corporate customers generate $887.50 average order value vs $864 for Home Office segment, with consistent purchasing patterns making them ideal for premium product offerings.</p>
+                <span class="badge badge-success">Premium Segment</span>
+            </div>
+        </div>
+        
+        <div class="insights-section">
+            <h2>📈 Performance Breakdown</h2>
+            
+            <h3 style="margin: 20px 0 10px 0; color: #667eea;">Top Products by Profit</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Sales</th>
+                        <th>Profit</th>
+                        <th>Orders</th>
+                        <th>Margin %</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Mouse</td>
+                        <td>$455,823</td>
+                        <td>$108,527</td>
+                        <td>358</td>
+                        <td>23.8%</td>
+                    </tr>
+                    <tr>
+                        <td>Printer</td>
+                        <td>$458,644</td>
+                        <td>$105,470</td>
+                        <td>390</td>
+                        <td>23.0%</td>
+                    </tr>
+                    <tr>
+                        <td>Monitor</td>
+                        <td>$432,446</td>
+                        <td>$101,766</td>
+                        <td>341</td>
+                        <td>23.5%</td>
+                    </tr>
+                    <tr>
+                        <td>Laptop</td>
+                        <td>$425,458</td>
+                        <td>$98,025</td>
+                        <td>351</td>
+                        <td>23.0%</td>
+                    </tr>
+                    <tr>
+                        <td>Keyboard</td>
+                        <td>$400,570</td>
+                        <td>$93,956</td>
+                        <td>316</td>
+                        <td>23.5%</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3 style="margin: 30px 0 10px 0; color: #667eea;">Regional Performance</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Region</th>
+                        <th>Sales</th>
+                        <th>Profit</th>
+                        <th>Orders</th>
+                        <th>Margin %</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>North</td>
+                        <td>$931,385</td>
+                        <td>$203,041</td>
+                        <td>999</td>
+                        <td>21.80%</td>
+                    </tr>
+                    <tr>
+                        <td>Central</td>
+                        <td>$912,428</td>
+                        <td>$201,159</td>
+                        <td>1,027</td>
+                        <td>22.05%</td>
+                    </tr>
+                    <tr>
+                        <td>South</td>
+                        <td>$904,915</td>
+                        <td>$197,876</td>
+                        <td>1,049</td>
+                        <td>21.87%</td>
+                    </tr>
+                    <tr>
+                        <td>West</td>
+                        <td>$830,251</td>
+                        <td>$182,021</td>
+                        <td>968</td>
+                        <td>21.92%</td>
+                    </tr>
+                    <tr>
+                        <td>East</td>
+                        <td>$822,565</td>
+                        <td>$182,790</td>
+                        <td>957</td>
+                        <td>22.22%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="insights-section">
+            <h2>💡 Strategic Recommendations</h2>
+            
+            <div class="recommendations">
+                <div class="recommendation-card">
+                    <h3>🎯 Product Strategy</h3>
+                    <ul>
+                        <li>Increase Technology promotion by 30%</li>
+                        <li>Expand Office Supplies from 15 to 25 SKUs</li>
+                        <li>Optimize Furniture pricing structure</li>
+                        <li>Bundle high-margin items together</li>
+                    </ul>
+                </div>
+                
+                <div class="recommendation-card">
+                    <h3>💰 Pricing Optimization</h3>
+                    <ul>
+                        <li>Cap maximum discount at 15%</li>
+                        <li>Create volume-based pricing tiers</li>
+                        <li>Test dynamic pricing in select regions</li>
+                        <li>Implement loyalty rewards program</li>
+                    </ul>
+                </div>
+                
+                <div class="recommendation-card">
+                    <h3>🌍 Regional Expansion</h3>
+                    <ul>
+                        <li>Document North region best practices</li>
+                        <li>Replicate success in West and East</li>
+                        <li>Target 15% growth in underperforming areas</li>
+                        <li>Customize offerings by region</li>
+                    </ul>
+                </div>
+                
+                <div class="recommendation-card">
+                    <h3>👥 Customer Focus</h3>
+                    <ul>
+                        <li>Develop corporate-specific bundles</li>
+                        <li>Create VIP program for top customers</li>
+                        <li>Implement RFM segmentation</li>
+                        <li>Personalize marketing campaigns</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="insights-section">
+            <h2>🔧 Technical Implementation</h2>
+            <p style="margin-bottom: 15px;">This analysis utilized a multi-tool approach for comprehensive insights:</p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px;">
+                <div style="padding: 15px; background: white; border-radius: 10px; text-align: center;">
+                    <strong>Python</strong><br>
+                    <span style="color: #666;">Data Processing & Analysis</span>
+                </div>
+                <div style="padding: 15px; background: white; border-radius: 10px; text-align: center;">
+                    <strong>SQL</strong><br>
+                    <span style="color: #666;">Data Querying</span>
+                </div>
+                <div style="padding: 15px; background: white; border-radius: 10px; text-align: center;">
+                    <strong>Power BI</strong><br>
+                    <span style="color: #666;">Interactive Dashboards</span>
+                </div>
+                <div style="padding: 15px; background: white; border-radius: 10px; text-align: center;">
+                    <strong>Excel</strong><br>
+                    <span style="color: #666;">Ad-hoc Analysis</span>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p><strong>Sales Performance Dashboard</strong> | Data Analysis Project</p>
+            <p style="margin-top: 10px; font-size: 0.9em;">Dataset: 5,000 orders | Period: Jan 2022 - Dec 2024 | 5 Regions | 3 Categories | 15 Products</p>
+        </footer>
+    </div>
+</body>
+</html>

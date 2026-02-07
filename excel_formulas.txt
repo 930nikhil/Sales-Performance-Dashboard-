@@ -1,0 +1,120 @@
+
+EXCEL FORMULAS FOR SALES DASHBOARD
+===================================
+
+📊 BASIC CALCULATIONS (Assuming data in columns A-O)
+---------------------------------------------------
+
+1. Total Sales
+=SUM(L:L)
+
+2. Total Profit
+=SUM(O:O)
+
+3. Total Orders
+=COUNTA(A:A)-1
+
+4. Average Order Value
+=SUM(L:L)/COUNTA(A:A)
+
+5. Profit Margin %
+=SUM(O:O)/SUM(L:L)*100
+
+6. Total Customers
+=SUMPRODUCT(1/COUNTIF(E:E,E:E&""))
+
+7. Average Discount
+=AVERAGE(N:N)*100
+
+
+📅 DATE-BASED FORMULAS
+---------------------
+
+8. Monthly Sales (with SUMIFS)
+=SUMIFS($L:$L,$B:$B,">="&DATE(2024,1,1),$B:$B,"<"&DATE(2024,2,1))
+
+9. Year-to-Date Sales
+=SUMIFS($L:$L,$B:$B,">="&DATE(YEAR(TODAY()),1,1),$B:$B,"<="&TODAY())
+
+10. Quarter Sales (Q1 Example)
+=SUMIFS($L:$L,$B:$B,">="&DATE(2024,1,1),$B:$B,"<"&DATE(2024,4,1))
+
+
+🎯 CONDITIONAL CALCULATIONS
+--------------------------
+
+11. Sales by Region (Example: East)
+=SUMIF(H:H,"East",L:L)
+
+12. Profit by Category (Example: Technology)
+=SUMIF(I:I,"Technology",O:O)
+
+13. Orders with Discount
+=COUNTIF(N:N,">0")
+
+14. High Value Orders (>$1000)
+=COUNTIF(L:L,">1000")
+
+
+📈 ADVANCED FORMULAS
+-------------------
+
+15. Top 5 Products (Array Formula)
+=INDEX($J:$J,MATCH(LARGE($O:$O,ROW(A1)),$O:$O,0))
+
+16. Running Total
+=SUM($L$2:L2)
+
+17. Percentage of Total
+=L2/SUM($L:$L)*100
+
+18. Rank by Profit
+=RANK(O2,$O:$O,0)
+
+19. Moving Average (3 rows)
+=AVERAGE(L2:L4)
+
+20. Growth Rate (Month over Month)
+=(L2-L3)/L3*100
+
+
+💡 PIVOT TABLE FORMULAS
+-----------------------
+
+21. Distinct Count of Customers
+In Pivot Table Field: Value Field Settings > Distinct Count
+
+22. Profit Margin in Pivot
+Calculated Field: =Profit/Sales
+
+23. Average Order Value
+Calculated Field: =Sales/COUNT(Order_ID)
+
+
+🎨 CONDITIONAL FORMATTING FORMULAS
+---------------------------------
+
+24. Highlight Negative Profit
+=O2<0
+
+25. Highlight Top 10% Sales
+=L2>=PERCENTILE($L:$L,0.9)
+
+26. Color Scale by Discount
+=N2>0.15
+
+27. Flag Low Margin Orders
+=O2/L2<0.15
+
+
+📊 DASHBOARD KPI FORMULAS
+------------------------
+
+28. Total Revenue Card
+=TEXT(SUM(L:L),"$#,##0")
+
+29. Profit Growth Indicator
+=IF((SUM(L:L)-SUM(Previous_Month_Sales))/SUM(Previous_Month_Sales)>0,"↑","↓")
+
+30. Performance vs Target
+=SUM(L:L)/Target_Value
