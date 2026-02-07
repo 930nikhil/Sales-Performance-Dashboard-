@@ -2,7 +2,7 @@
 # 📊 SALES PERFORMANCE DASHBOARD
 
 ## 🎯 Project Overview
-This is a **ready-to-use Sales Performance Dashboard project** designed to showcase data analysis, visualization, and business intelligence skills. Perfect for interviews, portfolio, and real-world applications.
+This is a **Sales Performance Dashboard project** designed to showcase data analysis, visualization, and business intelligence skills. 
 
 ---
 
